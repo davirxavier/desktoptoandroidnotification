@@ -30,7 +30,7 @@ class Configs:
 
     def __init__(self, cfgpath='cfg.ini'):
         self.cfgpath = cfgpath
-        file = open('cfg.ini', 'r+')
+        file = open('cfg.ini', 'a+')
         if os.stat(cfgpath).st_size < 15:
             self.cfg = benedict({'all': {'method': methods[0]}, methods[0]: {'key': ''}, methods[1]: {}})
             self.update()
