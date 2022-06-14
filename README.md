@@ -1,6 +1,6 @@
 # WTAN - WindowsToAndroidNotifications
 
-Simple python application that send your Windows 10 toast notifications to your phone.
+Simple python application that sends your Windows 10 toast notifications to your phone.
 
 Supported channels:
 - [ntfy.sh](https://ntfy.sh)
