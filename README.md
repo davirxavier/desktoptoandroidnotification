@@ -17,7 +17,7 @@ Install dependencies
 pip install -r requirements.txt
 ````
 
-Run with python
+Run with python (or just run the .exe from the releases page)
 ````commandline
 python notif.py
 ````
