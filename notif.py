@@ -1,4 +1,6 @@
 import asyncio
+import random
+import string
 import threading
 
 import requests
@@ -110,6 +112,10 @@ def onStopped():
     window['changedmethod'].update(disabled=False)
 
 
+def id_generator(size=20, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.SystemRandom().choice(chars) for _ in range(size))
+
+
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
 task = None
@@ -120,14 +126,16 @@ layout = [
         sg.Text("Select your desired notification method:"),
     ],
     [
-        sg.Combo(methods, default_value=cfg.method, readonly=True, size=(15, 1), enable_events=True,
+        sg.Combo([methods[0]], default_value=cfg.method, readonly=True, size=(15, 1), enable_events=True,
                  key='changedmethod'),
         sg.Text("Learn more...", enable_events=True, font=('Arial', 8, 'underline'))
     ],
     [
         sg.Text("Input your ntfy theme name below:", key='methoddesc'),
-    ], [
-        sg.In(size=(29, 1), key='secretkey', default_text=cfg.roomkey)
+    ],
+    [
+        sg.In(size=(30, 1), key='secretkey', default_text=cfg.roomkey),
+        sg.Button("Generate random", key="generaterandombtn")
     ],
     [
         sg.Button(button_text="Start listening", key="startbtn", pad=(0, 10))]
@@ -139,6 +147,11 @@ window = sg.Window(title="Win10NotificationSynchronizer",
 
 while True:
     event, values = window.read()
+
+    if event == 'generaterandombtn':
+        key = id_generator()
+        window['secretkey'].update(key)
+        cfg.roomkey = key
 
     if event == 'changedmethod':
         cfg.method = values['changedmethod']
