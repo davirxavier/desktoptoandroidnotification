@@ -23,14 +23,17 @@ methodsFn = {
 
 stopping = False
 
+
 def sendTelegram(title, text):
     pass
+
 
 def sendNtfy(title, text):
     print('Sending ntfy with title ' + title + ' to room ' + cfg.roomkey + '.')
     requests.post("https://ntfy.sh/" + cfg.roomkey,
                   data=text.encode(encoding='utf-8'),
-                  headers={ "Title": title.encode('utf-8') })
+                  headers={"Title": title.encode('utf-8')})
+
 
 async def startListening():
     if not ApiInformation.is_type_present("Windows.UI.Notifications.Management.UserNotificationListener"):
@@ -74,9 +77,11 @@ async def startListening():
             onStopped()
             break
 
+
 def stopListening():
     if task:
         task.cancel()
+
 
 def treatNotifTextElements(notif):
     elements = []
@@ -89,9 +94,12 @@ def treatNotifTextElements(notif):
 
     methodsFn[cfg.method](title, text)
 
+
 def onNotification(toasts):
     for toast in toasts:
-        treatNotifTextElements(toast.notification.visual.get_binding(KnownNotificationBindings.get_toast_generic()).get_text_elements())
+        treatNotifTextElements(
+            toast.notification.visual.get_binding(KnownNotificationBindings.get_toast_generic()).get_text_elements())
+
 
 def onStopped():
     global window, stopping
@@ -100,6 +108,7 @@ def onStopped():
     window['startbtn'].update('Start listening', disabled=False)
     window['secretkey'].update(disabled=False)
     window['changedmethod'].update(disabled=False)
+
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
@@ -111,7 +120,8 @@ layout = [
         sg.Text("Select your desired notification method:"),
     ],
     [
-        sg.Combo(methods, default_value=cfg.method, readonly=True, size=(15, 1), enable_events=True, key='changedmethod'),
+        sg.Combo(methods, default_value=cfg.method, readonly=True, size=(15, 1), enable_events=True,
+                 key='changedmethod'),
         sg.Text("Learn more...", enable_events=True, font=('Arial', 8, 'underline'))
     ],
     [

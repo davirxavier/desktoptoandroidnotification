@@ -1,0 +1,3 @@
+PySimpleGUI~=4.60.1
+winsdk~=1.0.0b5
+python-benedict~=0.25.1

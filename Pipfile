@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+benedict = "*"
+pysimplegui = "==4.60.1"
+python-benedict = "==0.25.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

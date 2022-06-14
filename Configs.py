@@ -4,6 +4,7 @@ from benedict import benedict
 
 methods = ['ntfy', 'Telegram']
 
+
 class Configs:
     cfgpath = ''
     cfg = None
