@@ -24,7 +24,7 @@ methodsFn = {
 }
 
 stopping = False
-
+stopApp = False
 
 def sendTelegram(title, text):
     pass
@@ -107,6 +107,11 @@ def onStopped():
     global window, stopping
     stopping = False
     print('Stopped.')
+    if stopApp:
+        window.close()
+        loop.close()
+        exit()
+        return
     window['startbtn'].update('Start listening', disabled=False)
     window['secretkey'].update(disabled=False)
     window['changedmethod'].update(disabled=False)
@@ -179,7 +184,7 @@ while True:
             stopListening()
 
     if event == sg.WIN_CLOSED:
+        stopping = True
+        stopApp = True
+        stopListening()
         break
-
-window.close()
-loop.close()
