@@ -3,6 +3,7 @@ import os
 from benedict import benedict
 
 methods = ['ntfy', 'Telegram']
+configVersion = 1
 
 
 class Configs:
@@ -50,11 +51,18 @@ class Configs:
         self.cfgpath = cfgpath
         file = open('cfg.ini', 'a+')
         if os.stat(cfgpath).st_size < 15:
-            self.cfg = benedict({'all': {'method': methods[0], 'interval': 5}, methods[0]: {'key': ''}, methods[1]: {'key': '', 'chatid': ''}})
-            self.update()
+            self.init_config_file()
         else:
             self.cfg = benedict.from_ini(self.cfgpath)
+            if configVersion > self.cfg.get_int('all.version', -1):
+                self.init_config_file()
         file.close()
+
+    def init_config_file(self):
+        self.cfg = benedict(
+            {'all': {'method': methods[0], 'interval': 5, 'version': configVersion}, methods[0]: {'key': ''},
+             methods[1]: {'key': '', 'chatid': ''}})
+        self.update()
 
     def update(self):
         self.cfg.to_ini(filepath=self.cfgpath)
