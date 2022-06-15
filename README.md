@@ -43,4 +43,10 @@ python notif.py
 
 ### How to - Telegram
 
-UNDER CONSTRUCTION
+You will have to create a new Telegram bot and find out your chat id. You can follow any tutorial on the internet, just be sure to have your bot's API key and your chat id before starting.
+
+1. Run the application.
+2. Select the Telegram mode in the dropdown.
+3. Enter your api key in the leftmost input and your desired chat id in the rightmost input.
+4. Start listening.
+5. Now you should receive your windows notifications in your chat, sent by your bot.

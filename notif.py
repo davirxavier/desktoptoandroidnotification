@@ -3,6 +3,7 @@ import random
 import string
 import threading
 
+import webbrowser
 import requests
 import telegram
 import PySimpleGUI as sg
@@ -147,7 +148,7 @@ layout = [
     [
         sg.Combo(methods, default_value=cfg.method, readonly=True, size=(15, 1), enable_events=True,
                  key='changedmethod'),
-        sg.Text("Learn more...", enable_events=True, font=('Arial', 8, 'underline'))
+        sg.Text("Learn more...", enable_events=True, font=('Arial', 8, 'underline'), key="learnmorelink")
     ],
     [
         sg.Text(methodsDesc[cfg.method], key='methoddesc'),
@@ -218,3 +219,6 @@ while True:
         stopApp = True
         stopListening()
         break
+
+    if event == 'learnmorelink':
+        webbrowser.open('https://github.com/davirxavier/windowstoandroidnotification')
