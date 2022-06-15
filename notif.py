@@ -22,8 +22,8 @@ methodsDesc = {
     methods[1]: 'Input your telegram bot apikey and desired chat id below:'
 }
 methodsFn = {
-    methods[0]: lambda title, text: sendNtfy(title, text),
-    methods[1]: lambda title, text: sendTelegram(title, text)
+    methods[0]: lambda title, text, appinfo='Unknown Application': sendNtfy(title, text, appinfo),
+    methods[1]: lambda title, text, appinfo='Unknown Application': sendTelegram(title, text, appinfo)
 }
 
 stopping = False
@@ -35,17 +35,17 @@ hostnames = winsdk.windows.networking.connectivity.NetworkInformation.get_host_n
 if hostnames.has_current:
     computername = hostnames.current.display_name
 
-def sendTelegram(title, text):
+def sendTelegram(title, text, appinfo='Unknown Application'):
     print('Sending notification with title ' + title + ' to telegram.')
     bot.send_message(chat_id=cfg.chatid, text='<i><b>' + title + '</b></i>\n\n' + text
-                     + '\n\n<pre>' + computername + '</pre>', parse_mode='html')
+                     + '\n\n<pre>' + computername + ' - ' + appinfo + '</pre>', parse_mode='html')
 
 
-def sendNtfy(title, text):
+def sendNtfy(title, text, appinfo='Unknown Application'):
     print('Sending ntfy with title ' + title + ' to room ' + cfg.key + '.')
     requests.post("https://ntfy.sh/" + cfg.key,
                   data=text.encode(encoding='utf-8'),
-                  headers={"Title": title.encode('utf-8'), "Tags": computername})
+                  headers={"Title": title.encode('utf-8'), "Tags": computername + ',' + appinfo})
 
 
 async def startListening():
@@ -100,7 +100,7 @@ def stopListening():
         task.cancel()
 
 
-def treatNotifTextElements(notif):
+def treatNotifTextElements(notif, appinfo):
     elements = []
     for curr in notif:
         elements.append(curr.text)
@@ -109,12 +109,12 @@ def treatNotifTextElements(notif):
     if len(elements) > 1:
         text = '\n'.join(elements[1:])
 
-    methodsFn[cfg.method](title, text)
+    methodsFn[cfg.method](title, text, appinfo)
 
 
 def onNotification(toasts):
     for toast in toasts:
-        treatNotifTextElements(toast.notification.visual.get_binding(KnownNotificationBindings.get_toast_generic()).get_text_elements())
+        treatNotifTextElements(toast.notification.visual.get_binding(KnownNotificationBindings.get_toast_generic()).get_text_elements(), toast.app_info.display_info.display_name)
 
 def onStopped():
     global window, stopping
