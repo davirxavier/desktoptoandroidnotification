@@ -43,8 +43,11 @@ def sendNtfy(title, text):
 
 
 async def startListening():
+    global window
+
     if not ApiInformation.is_type_present("Windows.UI.Notifications.Management.UserNotificationListener"):
         print("UserNotificationListener is not supported on this device.")
+        sg.Popup('UserNotificationListener is not supported on this device.', keep_on_top=True)
         exit()
 
     listener = UserNotificationListener.get_current()
@@ -53,6 +56,7 @@ async def startListening():
     while True:
         if accessStatus != UserNotificationListenerAccessStatus.ALLOWED:
             print("Access to UserNotificationListener is not allowed.")
+            sg.Popup('Access to UserNotificationListener is not allowed, the app may not work correctly.', keep_on_top=True)
             exit()
 
         print('Searching for new notifs...')
