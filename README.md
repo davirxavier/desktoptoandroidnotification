@@ -50,3 +50,5 @@ You will have to create a new Telegram bot and find out your chat id. You can fo
 3. Enter your api key in the leftmost input and your desired chat id in the rightmost input.
 4. Start listening.
 5. Now you should receive your windows notifications in your chat, sent by your bot.
+
+![img.png](imgs/telegram.png)
