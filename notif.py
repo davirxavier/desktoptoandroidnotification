@@ -7,6 +7,7 @@ import webbrowser
 import requests
 import telegram
 import PySimpleGUI as sg
+import winsdk.windows.networking.connectivity
 from winsdk.windows.foundation.metadata import ApiInformation
 from winsdk.windows.ui.notifications.management import UserNotificationListener, UserNotificationListenerAccessStatus
 from winsdk.windows.ui.notifications import NotificationKinds, KnownNotificationBindings
@@ -29,17 +30,22 @@ stopping = False
 stopApp = False
 
 bot = None
+computername = 'Unknown Device'
+hostnames = winsdk.windows.networking.connectivity.NetworkInformation.get_host_names().first()
+if hostnames.has_current:
+    computername = hostnames.current.display_name
 
 def sendTelegram(title, text):
     print('Sending notification with title ' + title + ' to telegram.')
-    bot.send_message(chat_id=cfg.chatid, text='<i><b>' + title + '</b></i>\n\n' + text, parse_mode='html')
+    bot.send_message(chat_id=cfg.chatid, text='<i><b>' + title + '</b></i>\n\n' + text
+                     + '\n\n<pre>' + computername + '</pre>', parse_mode='html')
 
 
 def sendNtfy(title, text):
     print('Sending ntfy with title ' + title + ' to room ' + cfg.key + '.')
     requests.post("https://ntfy.sh/" + cfg.key,
                   data=text.encode(encoding='utf-8'),
-                  headers={"Title": title.encode('utf-8')})
+                  headers={"Title": title.encode('utf-8'), "Tags": computername})
 
 
 async def startListening():
